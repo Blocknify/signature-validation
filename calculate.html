@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+   <head>
+      <!-- Required meta tags -->
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <!-- Favicon -->
+      <link rel="shortcut icon" type="image/png" href="https://blocknify.com/img/favicon.ico" />
+      <!-- Import Google Fonts -->
+      <link href="https://fonts.googleapis.com/css?family=Rubik:400,500,700" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700i,900" rel="stylesheet">
+      <!-- Bootstrap CSS -->
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+      <!-- Import style.css -->
+      <link rel="stylesheet" href="https://blocknify.com/css/iframe-style.css">
+      <!-- Fade in -->
+      <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+      <title>Blocknify | Verify</title>
+   </head>
+   <body id="drop-area">
+      <div class="container" style="margin: 1rem auto !important;">
+         <nav class="navbar navbar-expand-lg">
+            <a class="navbar-brand" href="https://blocknify.com/index.html">
+            <img src="https://blocknify.com/img/nav-logo.svg" alt="blocknify">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+               aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+               <div class="navbar-toggler-icon">
+                  <div class="hamburger"></div>
+                  <div class="hamburger"></div>
+                  <div class="hamburger"></div>
+               </div>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+               <div class="mr-auto"></div>
+               <div class="form-inline my-2 my-lg-0">
+                  <ul class="navbar-nav nav-ul">
+                     <li class="nav-item dropdown active">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        PRODUCTS
+                        </a>
+                        <div class="dropdown-menu industry-menu" aria-labelledby="navbarDropdownMenuLink">
+                           <a class="dropdown-item industry-item" href="https://blocknify.com/products/products.html">Product overview</a>
+                           <a class="dropdown-item industry-item" href="https://blocknify.com/products/api.html">API</a>
+                           <a class="dropdown-item industry-item" href="https://blocknify.com/products/chrome-extension-SME.html">Chrome Extension for SME</a>
+                           <a class="dropdown-item industry-item" href="https://blocknify.com/products/enterprise.html">Blocknify for Enterprise</a>
+                        </div>
+                     </li>
+                     <li class="nav-item">
+                        <a class="nav-link " href="https://blocknify.com/pricing.html">PRICING</a>
+                     </li>
+                     <li class="nav-item  dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        USE CASES
+                        </a>
+                        <div class="dropdown-menu industry-menu" aria-labelledby="navbarDropdownMenuLink1">
+                           <a class="dropdown-item industry-item" href="https://blocknify.com/compliance.html">Compliance</a>
+                           <a class="dropdown-item industry-item" href="https://blocknify.com/procurement.html">Procurement</a>
+                           <a class="dropdown-item industry-item" href="https://blocknify.com/real_estate.html">Real estate and leasing</a>
+                           <a class="dropdown-item industry-item" href="https://blocknify.com/fund-management.html">Fund management</a>
+                        </div>
+                     </li>
+                     <li class="nav-item ">
+                        <a class="nav-link" href="https://blocknify.com/about.html">ABOUT</a>
+                     </li>
+                     <li class="nav-item">
+                        <a class="nav-link" href="https://blog.blocknify.com/">BLOG</a>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </nav>
+      </div>
+      <div class="line"></div>
+      <div class="words-about-us" style="margin-bottom: 0px;">
+         <div class="container-sign">
+            <div class="single-solutions text-center">
+               <h1>Verify a document, locally</h1>
+               <h4 style="color: #111111 ; font-weight: 300;">Drag and drop your PDF to calculate your document fingerprint</h4>
+            </div>
+         </div>
+      </div>
+      <div>
+         <div class="container " style="width: 90% !important; margin-bottom: 300px; margin-top: 0px;">
+            <div class="row">
+               <div class="col-sm-12 text-center">
+                  <div  class="open-documents">
+                     <h4 id="message"></h4>
+                     <p id="pages"></p>
+                  </div>
+                  <div id="dropzone">
+                     <form class="dropzone needsclick" id="demo-upload" action="/file-upload">
+                        <img src="https://blocknify.com/img/fingerprint.svg" alt="fingerprint" style="height: 280px;">
+                        <div class="dz-message needsclick">
+                           <!-- Drag and drop your PDF anywhere on the page <br> -->
+                           or
+                           <label for="file-selector" class="upload"
+                              style="                
+                              text-decoration: underline;
+                              color: #196eef;
+                              cursor: pointer;
+                              margin-bottom: 0;
+                              "
+                              >click here</label>
+                           <input type="file" id="file-selector" hidden/>
+                           <br>
+                           <script>
+                              const fileSelector = document.getElementById('file-selector');
+                              fileSelector.addEventListener('change', (event) => {
+                                const fileList = event.target.files;
+                              });
+                              const dropArea = document.getElementById('drop-area');
+                              
+                              dropArea.addEventListener('dragover', (event) => {
+                              event.stopPropagation();
+                              event.preventDefault();
+                              // Style the drag-and-drop as a "copy file" operation.
+                              event.dataTransfer.dropEffect = 'copy';
+                              });
+                              
+                              // This is the code that looks for the upload using the button
+                              fileSelector.addEventListener("change", event => {
+                                event.stopPropagation();
+                                event.preventDefault();
+                              
+                                const fileList = event.target.files;
+                              
+                                const reader = new FileReader();
+                                reader.addEventListener("load", event => {
+                                    const file = event.target.result;
+                              
+                                    hashPDFDocument(file, (hash)=> {
+                                        console.log("This is the hash", hash);
+                                        document.getElementById("message").style = "margin-top:100px"
+                                        document.getElementById("message").innerHTML = `Your document fingerprint is: <br><p class="hash">${hash}</p>`
+                                    });
+                                })
+                              
+                                if(fileList.length > 0 && fileList.length < 2) {
+                                    reader.readAsDataURL(fileList[0])
+                                }
+                              
+                              })
+                              
+                              dropArea.addEventListener('drop', (event) => {
+                              event.stopPropagation();
+                              event.preventDefault();
+                              const fileList = event.dataTransfer.files;
+                              // we can access the file here
+                              const reader = new FileReader();
+                                reader.addEventListener("load", event => {
+                                    const file = event.target.result;
+                              
+                                    hashPDFDocument(file, (hash)=> {
+                                        console.log("This is the hash", hash);
+                                        document.getElementById("message").style = "margin-top:100px"
+                                        document.getElementById("message").innerHTML = `Your document fingerprint is: <br><p class="hash">${hash}</p>`
+                                    });
+                                })
+                              
+                                if(fileList.length > 0 && fileList.length < 2) {
+                                    reader.readAsDataURL(fileList[0])
+                                }
+                              });
+                           </script>
+                           <span class="note needsclick">(your file will <strong>not</strong> be uploaded)</span>
+                           <p style="margin-top: 50px; font-size: 18px;">You can find detailed steps on validating a signature <a href="https://blocknify.zendesk.com/hc/en-us/articles/360017217739-How-to-verify-a-signature">here</a></p>
+                        </div>
+                     </form>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="container " style="width: 90% !important; margin-bottom: 50px; ">
+            <div class="row ">
+               <div class="col-sm-12 text-center">
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="footer">
+         <div class="container">
+            <div class="row hidden-sm">
+               <div class="col-sm-3 privacy-notice">
+                  <img src="https://blocknify.com/img/blocknify-logo%20(1).svg" alt="blocknify">
+                  <h5> <a href="https://blocknify.com/Privacy/privacy_notice.pdf">PRIVACY NOTICE</a></h5>
+                  <p>All rights reserved. Blocknify 2020</p>
+               </div>
+               <div class="col-sm-3 wrap-footer-tags">
+                  <h5>Solutions</h5>
+                  <p>Document signing</p>
+                  <p>KYC</p>
+                  <p>Approval process</p>
+               </div>
+               <div class="col-sm-3 wrap-footer-tags">
+                  <h5>Reach us through</h5>
+                  <p><a href="https://www.linkedin.com/company/blocknify/">Linked In</a></p>
+                  <p><a href="https://twitter.com/blocknify">Twitter</a></p>
+               </div>
+               <div class="col-sm-3 wrap-footer-tags">
+                  <h5>Write us on</h5>
+                  <p>hello@blocknify.com</p>
+               </div>
+            </div>
+            <div class="mobile-footer show-mobile">
+               <div class="col-sm-12 social-media-footer text-center ">
+                  <a href="https://mobile.twitter.com/blocknify" style="margin-right:25px;">
+                  <img src="https://blocknify.com/img/white-twitter.png" alt="">
+                  </a>
+                  <a href="https://www.linkedin.com/company/blocknify/">
+                  <img src="https://blocknify.com/img/white-linkedin.png" alt="">
+                  </a>
+               </div>
+               <div class="col-sm-12 text-center">
+                  <p>Feel free to write us on: <br> <a href="" style="color: #0cd474;">hello@blocknify.com</a></p>
+               </div>
+               <div class="col-sm-12 text-center">
+                  <img src="https://blocknify.com/img/blocknify-logo%20(1).svg" alt="" style="margin: 40px 0px;">
+               </div>
+               <div class="col-sm-12">
+                  <a href="https://blocknify.com/Privacy/privacy_notice.pdf" class="privacy-notice text-center">PRIVACY
+                  NOTICE</a>
+                  <p>All rights reserved. Blocknify 2020</p>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Optional JavaScript -->
+      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+         crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+         crossorigin="anonymous"></script>
+      <script type="text/javascript" src="https://blocknify.com/js/slick.min.js"></script>
+      <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+      <script>
+         $(document).ready(function () {
+         
+             $(".tab-slider--nav li").click(function () {
+                 $(".tab-slider--body").hide();
+                 var activeTab = $(this).attr("rel");
+                 $("#" + activeTab).fadeIn();
+                 if ($(this).attr("rel") == "tab2" || $(this).attr("rel") == "tab4") {
+                     $('.tab-slider--tabs').addClass('slide');
+                 } else {
+                     $('.tab-slider--tabs').removeClass('slide');
+                 }
+                 $(".tab-slider--nav li").removeClass("active");
+                 $(this).addClass("active");
+             });
+         
+         });
+         
+      </script>
+      <script src="https://blocknify.com/js/onload.js"></script>
+      <!-- fade in -->
+      <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+      <script>
+         AOS.init();
+      </script>
+      <script src="./dist/pdf.js"></script>
+      <script src="./dist/pdf.worker.js"></script>
+      <script src="./dist/hashPDFDocument.js"></script>
+   </body>
+</html>
