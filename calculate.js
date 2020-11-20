@@ -16,8 +16,11 @@ fileSelector.addEventListener("change", event => {
     event.stopPropagation();
     event.preventDefault();
 
-    const fileList = event.target.files;
-    const progressElement = document.getElementById("pages");
+    const spinner = document.querySelector(".calculation-spinner");
+    spinner.style = "display: block;"
+
+    const messageElement = document.getElementById("message");
+    messageElement.style = "display: none";
 
     const reader = new FileReader();
 
@@ -25,15 +28,14 @@ fileSelector.addEventListener("change", event => {
         const file = event.target.result;
 
         hashPDFDocument(file, (hash) => {
-            document.getElementById("message").style = "margin-top:100px"
-            document.getElementById("message").innerHTML = `Your document fingerprint is: <br><p class="hash">${hash}</p>`
-        }, ({ hashed_pages, total_pages }) => {
-            console.log("Updating number of hashed pages");
-            return progressElement.innerText = "Hashed " + hashed_pages + " out of " + total_pages + " pages."
+            spinner.style = "display: none;"
 
+            messageElement.style = "display: block;"
+            messageElement.innerHTML = `Your document fingerprint is: <br><p class="hash">${hash}</p>`
         });
     })
 
+    const fileList = event.target.files;
     if (fileList.length > 0 && fileList.length < 2) {
         reader.readAsDataURL(fileList[0])
     }
@@ -45,19 +47,23 @@ dropArea.addEventListener('drop', (event) => {
     event.stopPropagation();
     event.preventDefault();
     const fileList = event.dataTransfer.files;
-    const progressElement = document.getElementById("pages");
+
+    const spinner = document.querySelector(".calculation-spinner");
+    spinner.style = "display: block;"
+
+    const messageElement = document.getElementById("message");
+    messageElement.style = "display: none";
+
     // we can access the file here
     const reader = new FileReader();
     reader.addEventListener("load", event => {
         const file = event.target.result;
 
         hashPDFDocument(file, (hash) => {
-            console.log("This is the hash", hash);
-            document.getElementById("message").style = "margin-top:100px"
-            document.getElementById("message").innerHTML = `Your document fingerprint is: <br><p class="hash">${hash}</p>`
-        }, ({ hashed_pages, total_pages}) => {
-            console.log("Updating number of hashed pages");
-            return progressElement.innerText = "Hashed " + hashed_pages + " out of " + total_pages + " pages."
+            spinner.style = "display: none;"
+
+            messageElement.style = "display: block;"
+            messageElement.innerHTML = `Your document fingerprint is: <br><p class="hash">${hash}</p>`
         });
     })
 
