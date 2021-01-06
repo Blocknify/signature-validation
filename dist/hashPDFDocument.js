@@ -268,7 +268,6 @@ function removeBlocknifyQRCode(pageContent, last_index) {
     return pageContent;
 }
 
-// Started using it and it does work but it will also present an error as it original call is not waiting
 function checkAgainstBlockchain(signer, toml) {
     return new Promise((resolve, reject) => {
 
@@ -279,12 +278,12 @@ function checkAgainstBlockchain(signer, toml) {
                 signer.tomlVerified = toml.indexOf(sourceAccount) >= 0;
 
                 //Signature information from Stellar
-                signer.postedBaseHash = base64ToBase16(response.data.memo);
+                signer.postedSignedTxHash = base64ToBase16(response.data.memo);
                 signer.base64SigHash = response.data.memo
                 signer.stellarPostingDate = response.data.created_at
 
                 //Verification against the raw information from the PDF
-                signer.generatedMatchesPosted = signer.postedBaseHash === signer.signedTxHash;
+                signer.generatedMatchesPosted = signer.postedSignedTxHash === signer.signedTxHash;
                 signer.verified = signer.generatedMatchesPosted && signer.signedTxContainsHash
 
                 resolve(signer);
@@ -351,6 +350,7 @@ function getSignerData(item, i, annotation, contentHash) {
             expertLink = "https://stellar.expert/explorer/public/tx/";
             horizonLink = "https://horizon.stellar.org/transactions/";
         } else if (stellarExpertLink.indexOf("testnet") >= 0) {
+            console.log("here")
             expertLink = "https://stellar.expert/explorer/testnet/tx/";
             horizonLink = "https://horizon-testnet.stellar.org/transactions/";
         } else {
@@ -373,7 +373,7 @@ function getSignerData(item, i, annotation, contentHash) {
         // check if the hashed signing info string is in the signed tx
         let signatureInfoHashMatch = signer.signedTx.match(signer.signatureInfoHash);
 
-        if (signatureInfoHashMatch.length === 1) {
+        if (signatureInfoHashMatch && signatureInfoHashMatch.length === 1) {
             signer.signedTxContainsHash = true;
         } else {
             console.error("The signer " + signer.identityObj.name + " doesn't have a matching hash.")
@@ -473,6 +473,11 @@ function getAllSignatures(annotationsData, contentHash) {
 }
 
 function hashPDFDocument(data, callback, progress) {
+    
+    //clear any prior results
+    document.getElementById("document-signatures").innerHTML = "";
+
+
     const getNumberOfPages = (filteredPNGImagesArray, originalNumberOfPages) => {
         if (!filteredPNGImagesArray.length || originalNumberOfPages === 1) {
             return originalNumberOfPages;
