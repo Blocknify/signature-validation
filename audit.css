@@ -26,6 +26,15 @@
 	width: 640px !important;
 }
 
+.test {
+	color:#FF6666 !important;
+	font-size: 13px !important;
+}
+
+.not-verified {
+	color:#FF6666 !important;
+}
+
 .linkP {
 	font-family: Rubik;
 	font-size: 16px;
