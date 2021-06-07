@@ -350,9 +350,12 @@ function getSignerData(item, i, annotation, contentHash) {
         if (stellarExpertLink.indexOf("public") >= 0) {
             expertLink = "https://stellar.expert/explorer/public/tx/";
             horizonLink = "https://horizon.stellar.org/transactions/";
+            signer.testNet = false
         } else if (stellarExpertLink.indexOf("testnet") >= 0) {
             expertLink = "https://stellar.expert/explorer/testnet/tx/";
             horizonLink = "https://horizon-testnet.stellar.org/transactions/";
+            signer.testNet = true
+            console.log("This is a test document posted on Stellar's testNet")
         } else {
             throw new Error("Something is wrong with the Stellar link.")
         }
@@ -628,7 +631,7 @@ function formatTime(date) {
 
 function buildSignatureHtml(signatures) {
 
-    html = '<div class="doc-history" id="doc-history"> <h2  style="margin-top: 25px 0">Signature and document verification</h2> <h6 class="doc-title">All this data has been retrieved directly from your PDF audit trail. We require all signers to verify their email, verify their phone number with an SMS challenge, create a unique signing PIN, and ask them to input their legal name.<br><br>At the time of signature, we locally create a PDF fingerprint, then add the signer\'\s identity information, added signers (if signers were added), and sign this data with their private key. We then SHA256 hash this information to generate a signature hash and post this signature hash on the Stellar Blockchain. <br><br>To verify signatures, we do the following steps: <ol><li>Regenerate the document\'\s fingerprint with the given PDF and match it with the signed document fingerprinted. Ensuring this PDF\'\s visual content is the exact same as the PDF when the signer signed the document.</li><li>We take the identity information, signature, and stellar transaction from the attached audit trail and use it to validate against signature hash cryptographically.</li><li>We then match the verified signature hash with the posted Stellar transaction. Ensuring this information authentic and has not been tampered with.</li><li>We verify that the account that submitted the signature hash is a verified Blocknify account.</li></ol>You can view the verification source code on our <a href="https://github.com/Blocknify/signature-validation">GitHub</a>.<br><br>Please be sure to review the identity information matches what you expect from your signer (e.g., email matches their known email, and phone number matches their known number).</h4> <h2 style="margin-bottom:20px">Attached signatures</h2>'
+    html = '<div class="doc-history" id="doc-history"> <h2  style="margin-top: 25px 0">Signature and document verification</h2> <h6 class="doc-title">All this data has been retrieved directly from your PDF audit trail. We require all signers to verify their email, verify their phone number with an SMS challenge, create a unique signing PIN, and ask them to input their legal name.<br><br>At the time of signature, we locally create a PDF fingerprint, then add the signer\'\s identity information, added signers (if signers were added), and sign this data with their private key. We then SHA256 hash this information to generate a signature hash and post this signature hash on the Stellar Blockchain. <br><br>To verify signatures, we do the following steps: <ol><li>Regenerate the document\'\s fingerprint with the given PDF and match it with the signed document fingerprint. Ensuring this PDF\'\s visual content is the exact same as the PDF when the signer signed the document.</li><li>We take the identity information, signature, and stellar transaction from the attached audit trail and use it to validate against signature hash cryptographically. This check ensures that the identity information list below has not be modified since the time of signature. If someone were to modify their identity information, then we would not be able to match it against the blockchain.</li><li>We then match the verified signature hash with the posted Stellar transaction. Ensuring this information authentic and has not been tampered with.</li><li>We verify that the account that submitted the signature hash is a verified Blocknify account.</li></ol>You can view the verification source code on our <a href="https://github.com/Blocknify/Signature-Validation">GitHub</a>.<br><br>Please be sure to review the identity information matches what you expect from your signer (e.g., email matches their known email, and phone number matches their known number).</h4> <h2 style="margin-bottom:20px">Attached signatures</h2>'
 
     for (var i = 0; i < signatures.length; i++) {
         let currentSigner = signatures[i]
@@ -663,10 +666,21 @@ function buildSignatureHtml(signatures) {
 
         html += '<tr>\r\n   <td style=\" vertical-align: top !important;\">\r\n      <h1 class=\"info\"> Signature hash: <\/h1>\r\n   <\/td>\r\n   <td>\r\n      <p id=\"signature_data\">' + currentSigner.base64SigHash + '<\/p>\r\n   <\/td>\r\n<\/tr>\r\n                                    <\/table>'
         if (currentSigner.verified === true) {
-            html += "<p class=\"verified\">This PDF and the information above has been re-generated locally and then matched against what was posted to the <a class=\"linkP\"href=\" " + currentSigner.stellarTx + "\" >Stellar Blockchain on " + postingDate + " at "+ postingTime +"</a>. <\/p>\r\n"
+            if (!currentSigner.tomlVerified && !currentSigner.testNet) {
+                html += '<p class=\"verified not-verified\">This signature was posted by unauthorized account. Signatures can only be validated if they were posted from a valid Blocknify account (please see https:\/\/blocknify.com\/.well-known\/stellar.toml for a list of accounts).<\/p>\r\n'
+            } else {
+                html += "<p class=\"verified\">This PDF and the information above has been re-generated locally and then matched against what was posted to the <a class=\"linkP\"href=\" " + currentSigner.stellarTx + "\" >Stellar Blockchain on " + postingDate + " at "+ postingTime +"</a>. <\/p>\r\n"
+            }
         } else {
             html += '<p class=\"verified not-verified\">This signature could not be verified<\/p>\r\n'
         }
+
+        if (currentSigner.testNet){
+            html += '<p class=\"verified test\">This is a test signature and is only for demonstrative purposes.<\/p>\r\n'
+        }
+
+
+
         html += ' <\/table>'
     };
     html += '</div>'
@@ -674,5 +688,3 @@ function buildSignatureHtml(signatures) {
     document.getElementById("document-signatures").innerHTML = html;
 
 };
-
-
